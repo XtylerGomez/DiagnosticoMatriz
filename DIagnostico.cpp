@@ -1,13 +1,10 @@
 #include <iostream>
+#include <time.h>
 #define MatrixSize 10 
 //tamaño de la matriz como constante, para no
 //cambiar todo el codigo constantemente.
 
 using namespace std;
-
-//Generador de numeros random para las coordenadas
-srand((usingned) time(NULL))
-int rand = srand() % 30;
 
 //Declarar Matriz y sus funciones.
 int Matrix[MatrixSize][MatrixSize];
@@ -23,13 +20,17 @@ void ShowMatrix(){
         for(int col=0;col<MatrixSize;col++){
             cout<<" "<<Matrix[row][col]<<" ";
         }
-      cout<<endl;
+      cout<<""<<endl;
     }
 }
 
 int main(){
+//Generador de numeros random para las coordenadas
+srand(time(NULL));
+int rndm = rand() % 30;
 
 IniciarMatriz();
 ShowMatrix();
 
+  cout<<rndm<<endl;
 }
