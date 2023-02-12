@@ -1,26 +1,25 @@
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include <conio.h> //para el getch()
 #include "src/Matrix.hpp"
 #include "src/Player.hpp"
-#define MatrixSize 10 
 
 using namespace std;
-//Funciones que hacen falta : 
-//Iniciar Jugador
-//Sumar
-//Movimiento
-
 
 int main(){
 
-Matrix m;
-Player p;
-char wasd;
-m.StartMatrix();
-p.SetAxis();
-while(wasd!='p'){
-    cin>>wasd;
-    p.Move(wasd);
-}
+    //Objetos de la matriz y la player
+    Matrix m;
+    Player p;
+
+    char wasd;  //Chequear lo ingresado
+
+    m.StartMatrix(); //Iniciar Matriz
+    p.SetAxis();    //Iniciar Juego
+
+    while(wasd!='p'){ //P va a ser la salida del programa
+        wasd=getch(); //caracter ingresado
+        p.Move(wasd); //Funcion de moverse
+    }
 }
