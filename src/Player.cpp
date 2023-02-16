@@ -13,39 +13,41 @@ void Player::SetAxis(){ //inicio del juego, se establecen las coordenadas y se a
     srand(time(NULL));
     int x=rand()%10;
     int y=rand()%10;
-    SetAxisX(x);
-    SetAxisY(y);
     CheckBorder(x, y);
     m.ShowMatrix(x, y);
 }
 
 void Player::Move(char key){//mover el jugador
-    system("cls"); //como es consola ps tiene que estar limpia esta verdad ?
+    system("cls"); //limpiar la pantalla antes de cualquier cosa
 
     int x=GetAxisX();
     int y=GetAxisY();
     switch(key){
         
         case 'w':   //Arriba
-        x=x-1;
+        if(x<=0){x=9;}else{
+            x=(x-1)%10;
+        }
         CheckBorder(x, y);
 
         break;
 
         case 'a':   //Izquierda
-        y=y-1;
+        if(y<=0){y=9;}else{
+            y=(y-1)%10;
+        }
         CheckBorder(x, y);
 
         break;
 
         case 's':   //Abajo
-        x=x+1;
+        x=(x+1)%10;
         CheckBorder(x, y);
 
         break;
 
         case 'd':   //Derecha
-        y=y+1;
+        y=(y+1)%10;
         CheckBorder(x, y);
 
         break;
@@ -65,28 +67,19 @@ void Player::Move(char key){//mover el jugador
     >jugar con los valores del s y del 0 (valores de los limites)
 */
 void Player::CheckBorder(int _x, int _y){//Checar la pocision para corregirla y dar la ilusion de matriz circular
+    
+    int x=_x;
+    int y=_y;
 
-    int s=(m.getSize()-1);
-    int x=0;
-    int y=0;
     for(int i=-1;i<=1;i++){
         for(int j=-1;j<=1;j++){
-            x=_x+i;
-            y=_y+j;
-            if(x=0){
-                x=s;
+            x=(_x+i)%10;
+            y=(_y+j)%10;
+            if(m.Matriz[x][y]>=9){
+                m.Matriz[x][y]=0;
+            }else{
+                m.Matriz[x][y]++;
             }
-            if(x=s){
-                x=0;
-            }
-            if(y=0){
-                y=s;
-            }
-            if(y=s){
-                y=0;
-            }
-            Add(x,y);
-            
         }
     }
     SetAxisX(_x);
@@ -104,6 +97,6 @@ void Player::CheckBorder(int _x, int _y){//Checar la pocision para corregirla y 
 
 void Player::Add(int _x, int _y){//Sumas de los valores del jugador y alrededores
     //Suma de la pocision del jugador
-    m.Matriz[_x][_y]++;
+    
    
 }

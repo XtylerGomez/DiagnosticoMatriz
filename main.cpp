@@ -18,6 +18,7 @@ int main(){
     m.StartMatrix(); //Iniciar Matriz
     p.SetAxis();    //Iniciar Juego
 
+    
     while(wasd!='p'){ //P va a ser la salida del programa
         wasd=getch(); //caracter ingresado
         p.Move(wasd); //Funcion de moverse
