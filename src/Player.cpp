@@ -2,8 +2,7 @@
 #include "Player.hpp"
 #include "Matrix.hpp"
 #include <iostream>
-#include <time.h> //pa los randoms
-#include <windows.h> //pa los colores
+#include <time.h> //para los randoms
 #include <stdlib.h>
 
 using namespace std;
@@ -11,98 +10,74 @@ using namespace std;
 Matrix m;
 void Player::SetAxis(){ //inicio del juego, se establecen las coordenadas y se agregan.
     srand(time(NULL));
-    AxisX=rand()%10;
-    AxisY=rand()%10;
-    CheckBorder();
-    Add(AxisX, AxisY);
+    int x=rand()%10;
+    int y=rand()%10;
+    Add(x, y);  //Como dentro del Add estan los Setters de las coordenadas no hizo falta hacerlas aqui
+    m.ShowMatrix(x, y); 
 }
 
 void Player::Move(char key){//mover el jugador
-    system("cls"); //como es consola ps tiene que estar limpia esta verdad ?
+    system("cls"); //limpiar la pantalla antes de cualquier cosa
+
+    int x=GetAxisX();   //para no usar los valores en si, mejor guardarlos en una
+    int y=GetAxisY();   //variable local y asi no tener problemas
     switch(key){
         
         case 'w':   //Arriba
-        CheckBorder();
-        AxisX=AxisX-1;
-        Add(AxisX, AxisY);
+        if(x<=0){x=9;}else{ //Check del borde Norte (desbordamiento negativo)
+            x=(x-1); //Check const
+        }
+        Add(x, y);
+
         break;
 
         case 'a':   //Izquierda
-        CheckBorder();
-        AxisY=AxisY-1;
-        Add(AxisX, AxisY);
+        if(y<=0){y=9;}else{ //Check del Borde Oeste (desbordamiento negativo)
+            y=(y-1);
+        }
+        Add(x, y);
+
         break;
 
         case 's':   //Abajo
-        CheckBorder();
-        AxisX=AxisX+1;
-        Add(AxisX, AxisY);
+        x=(x+1)%10; //Check del Borde Sur (desbordamiento positivo)
+        Add(x, y);
+
         break;
 
         case 'd':   //Derecha
-        CheckBorder();
-        AxisY=AxisY+1;
-        Add(AxisX, AxisY);
+        y=(y+1)%10; //Check del Borde Este (desbordamiento positivo)
+        Add(x, y);
+
         break;
 
         default:
         break;
     }
-    
+    m.ShowMatrix(GetAxisX(), GetAxisY()); //Una vez hecho el movimiento y el add, se vuelve a mostrar la matriz
 }
 
-/*BUGGEADO
-    cuando se acerca a los negativos el jugador se va del mapa, pero sigue pudiendose mover, y cuando se va
-    a los positivos si regresa por el otro lado pero en la pocision 1, no desde el 0, no se porque esta ocurriendo esto
-    de momento tengo estas cosas en mente : 
-    >No se están actualizando los valores correctos, revisar los valores de entrada y de salida
-    >con lo anterior, cambiar el tipo de funcion de void a Int, y retornar el Axis nuevo.
-    >jugar con los valores del s y del 0 (valores de los limites)
-*/
-void Player::CheckBorder(){//Checar la pocision para corregirla y dar la ilusion de matriz circular
 
-    int s=(m.getSize()-1);
-    
-    if(AxisX==0){ //Limite Arriba
-        AxisX=s;
+void Player::Add(int _x, int _y){//Checar las Pocisiones aledañas y sumarlas.
+    int x=_x; //Variables Locales
+    int y=_y;
+
+    for(int i=-1;i<=1;i++){     //Ciclos para simplificar el checkeo y la suma de las pocisiones aledañas,
+        for(int j=-1;j<=1;j++){ //siempre son, de la pocision actual, cambios en 1 a cualquier direccion.
+            
+            x=(_x+i)%10;    //Se hacen los mismos checks de desbordamiento positivo y negativo de las
+            y=(_y+j)%10;    //Pocisiones de alrededor
+
+            if(x<0){x=9;}
+            if(y<0){y=9;}
+
+            if(m.Matriz[x][y]>=9){ //Comprobacion para Evitar que se muestren numeros de mas de una cifra
+                m.Matriz[x][y]=0;
+            }else{
+                m.Matriz[x][y]++;
+            }
+        }
     }
-    if(AxisX==s){ //Limite Abajo
-        AxisX=0;
-    }
-    if(AxisY==0){ //Limite Izquierda
-        AxisY=s;
-    }
-    if(AxisY==s){ //Limite Derecha
-        AxisY=0;
-    }
-
-/*BUGGEADO
-    Cuando se acerca a un borde no se traslada por el otro lado, sigue el orden de la matriz, ademas olvidé 
-    el requerimiento de que no tiene que pasar de 9, haciendo que la matriz se desacomode.
-    ideas para arreglarlo : 
-    >Revisar los valores de entrada y de salida
-    >hacer un check para no superar el 9
-    >aplicar la funcion de CheckBorder tambien a la cruz y a las esquinas
-    >Combinar la funcion de Add y ChechBorder ?? 
-*/
-}
-void Player::Add(int AxisX, int AxisY){//Sumas de los valores del jugador y alrededores
-    //Suma de la pocision del jugador
-    m.Matriz[AxisX][AxisY]++;
-
-    //la Cruz
-    m.Matriz[AxisX-1][AxisY]++;
-    m.Matriz[AxisX+1][AxisY]++;
-    m.Matriz[AxisX][AxisY-1]++;
-    m.Matriz[AxisX][AxisY+1]++;
-
-    //las Esquinas
-    m.Matriz[AxisX-1][AxisY-1]++;
-    m.Matriz[AxisX-1][AxisY+1]++;
-    m.Matriz[AxisX+1][AxisY-1]++;
-    m.Matriz[AxisX+1][AxisY+1]++;
-
-    //reiniciar el show de la matriz
-    m.ShowMatrix(AxisX, AxisY);
-    
+    SetAxisX(_x); //Finalmente se actualizan las coordenadas en base al valor recibido.
+    SetAxisY(_y);
 }

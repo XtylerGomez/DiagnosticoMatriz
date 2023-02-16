@@ -3,18 +3,21 @@
 #define Player_hpp
 
     class Player
-    {
-    
-    public: 
+    {     
+    private:    //Ya aprendi a usar los atributos privados
         int AxisX; //Coordenadas
         int AxisY;
-        
+
+    public: 
         void SetAxis();
-        void CheckBorder();
         void Move(char key);
         void Add(int _x, int _y);
-        int GetAxisX(){return AxisX;}//Getters. Tengo entendido que esto deberia hacerlo cuando los
-        int GetAxisY(){return AxisY;}//parametros sean Privados, pero los voy aplicando de una
+
+        void SetAxisX(int _x){AxisX=_x;}//Setters
+        void SetAxisY(int _y){AxisY=_y;}
+
+        int GetAxisX(){return AxisX;}//Getters
+        int GetAxisY(){return AxisY;}
 
     };  
 

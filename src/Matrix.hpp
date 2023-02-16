@@ -5,12 +5,12 @@
 
     class Matrix{
 
-        public : //Todo en publico en lo que me vuelvo a acostumbrar a manejar con Private 
+        public : //No hizo falta hacer cosos privados aqui
         int Size=10; 
         int Matriz[10][10];
         void StartMatrix();
         void ShowMatrix(int _x, int _y);
-        int getSize() const {return Size;} //const == Constante sisisis
+        int getSize() const {return Size;} //const == Constante, logic
     };
 
 #endif
